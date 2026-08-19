@@ -15,6 +15,7 @@ public class AuthService {
         boolean authentifie = utilisateurDAO.verifierAuthentification(login, motDePasse);
         if (authentifie) {
             utilisateurConnecte = utilisateurDAO.rechercherParLogin(login);
+            System.out.println("Role : " + utilisateurConnecte.getRole());
         }
         return authentifie;
     }

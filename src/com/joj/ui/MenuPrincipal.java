@@ -14,7 +14,6 @@ import com.joj.model.Athlete;
 import com.joj.model.Competition;
 import com.joj.model.Resultat;
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Scanner;
 
@@ -70,13 +69,18 @@ public class MenuPrincipal {
             System.out.println("====================================");
             System.out.println("JEUX OLYMPIQUES DE LA JEUNESSE 2026");
             System.out.println("====================================");
-            System.out.println("1. Gestion des utilisateurs");
-            System.out.println("2. Gestion des pays");
-            System.out.println("3. Gestion des disciplines");
-            System.out.println("4. Gestion des athletes");
-            System.out.println("5. Gestion des competitions");
-            System.out.println("6. Gestion des resultats");
-            System.out.println("7. Statistiques");
+            System.out.println("Bienvenue " + authService.getUtilisateurConnecte().getNomComplet() + " !");
+            System.out.println("1. Gestion des pays");
+            System.out.println("2. Gestion des disciplines");
+            System.out.println("3. Gestion des athletes");
+            System.out.println("4. Gestion des competitions");
+            System.out.println("5. Gestion des resultats");
+            System.out.println("6. Statistiques");
+
+            if (authService.estAdmin()) {
+                System.out.println("7. Gestion des utilisateurs");
+            }
+
             System.out.println("8. Deconnexion");
             System.out.println("9. Quitter");
             System.out.print("Votre choix : ");
@@ -86,29 +90,29 @@ public class MenuPrincipal {
 
             switch (choix) {
                 case 1:
+                    menuPays();
+                    break;
+                case 2:
+                    menuDiscipline();
+                    break;
+                case 3:
+                    menuAthlete();
+                    break;
+                case 4:
+                    menuCompetition();
+                    break;
+                case 5:
+                    menuResultat();
+                    break;
+                case 6:
+                    afficherStatistiques();
+                    break;
+                case 7:
                     if (authService.estAdmin()) {
                         menuUtilisateur();
                     } else {
-                        System.out.println("Acces refuse ! Vous n'etes pas administrateur.");
+                        System.out.println("Acces refuse !");
                     }
-                    break;
-                case 2:
-                    menuPays();
-                    break;
-                case 3:
-                    menuDiscipline();
-                    break;
-                case 4:
-                    menuAthlete();
-                    break;
-                case 5:
-                    menuCompetition();
-                    break;
-                case 6:
-                    menuResultat();
-                    break;
-                case 7:
-                    afficherStatistiques();
                     break;
                 case 8:
                     authService.seDeconnecter();
@@ -374,6 +378,11 @@ public class MenuPrincipal {
                     String prenom = scanner.nextLine();
                     System.out.print("Sexe (M/F) : ");
                     String sexe = scanner.nextLine();
+                    while (!sexe.equals("M") && !sexe.equals("F")) {
+                        System.out.println("Sexe invalide ! Utilisez M ou F");
+                        System.out.print("Sexe (M/F) : ");
+                        sexe = scanner.nextLine();
+                    }
                     System.out.print("Date de naissance (AAAA-MM-JJ) : ");
                     String dateStr = scanner.nextLine();
                     Date dateNaissance = Date.valueOf(dateStr);
@@ -397,6 +406,11 @@ public class MenuPrincipal {
                         String nvPrenom = scanner.nextLine();
                         System.out.print("Nouveau sexe (M/F) : ");
                         String nvSexe = scanner.nextLine();
+                        while (!nvSexe.equals("M") && !nvSexe.equals("F")) {
+                            System.out.println("Sexe invalide ! Utilisez M ou F");
+                            System.out.print("Sexe (M/F) : ");
+                            nvSexe = scanner.nextLine();
+                        }
                         System.out.print("Nouvelle date de naissance (AAAA-MM-JJ) : ");
                         String nvDateStr = scanner.nextLine();
                         Date nvDateNaissance = Date.valueOf(nvDateStr);
@@ -472,6 +486,11 @@ public class MenuPrincipal {
                     Date dateCompetition = Date.valueOf(dateStr);
                     System.out.print("Lieu (Dakar/Diamniadio/Saly) : ");
                     String lieu = scanner.nextLine();
+                    while (!lieu.equals("Dakar") && !lieu.equals("Diamniadio") && !lieu.equals("Saly")) {
+                        System.out.println("Lieu invalide ! Lieux autorises : Dakar, Diamniadio, Saly");
+                        System.out.print("Lieu : ");
+                        lieu = scanner.nextLine();
+                    }
                     System.out.print("ID de la discipline : ");
                     int disciplineId = scanner.nextInt();
                     scanner.nextLine();
@@ -489,8 +508,13 @@ public class MenuPrincipal {
                         System.out.print("Nouvelle date (AAAA-MM-JJ) : ");
                         String nvDateStr = scanner.nextLine();
                         Date nvDateCompetition = Date.valueOf(nvDateStr);
-                        System.out.print("Nouveau lieu : ");
+                        System.out.print("Nouveau lieu (Dakar/Diamniadio/Saly) : ");
                         String nvLieu = scanner.nextLine();
+                        while (!nvLieu.equals("Dakar") && !nvLieu.equals("Diamniadio") && !nvLieu.equals("Saly")) {
+                            System.out.println("Lieu invalide ! Lieux autorises : Dakar, Diamniadio, Saly");
+                            System.out.print("Lieu : ");
+                            nvLieu = scanner.nextLine();
+                        }
                         System.out.print("Nouvel ID de la discipline : ");
                         int nvDisciplineId = scanner.nextInt();
                         scanner.nextLine();

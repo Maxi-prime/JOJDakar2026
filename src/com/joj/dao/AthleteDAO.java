@@ -55,6 +55,19 @@ public class AthleteDAO {
     }
 
     public void supprimer(int id) {
+        String sqlCheck = "SELECT COUNT(*) FROM resultat WHERE athlete_id = ?";
+        try {
+            PreparedStatement psCheck = connection.prepareStatement(sqlCheck);
+            psCheck.setInt(1, id);
+            ResultSet rs = psCheck.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                System.out.println("Impossible de supprimer cet athlete car il a des resultats associes !");
+                return;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         String sql = "DELETE FROM athlete WHERE id = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);

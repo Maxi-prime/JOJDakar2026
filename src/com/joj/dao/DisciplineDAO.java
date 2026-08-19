@@ -41,6 +41,27 @@ public class DisciplineDAO {
     }
 
     public void supprimer(int id) {
+        String sqlCheckAthlete = "SELECT COUNT(*) FROM athlete WHERE discipline_id = ?";
+        String sqlCheckCompetition = "SELECT COUNT(*) FROM competition WHERE discipline_id = ?";
+        try {
+            PreparedStatement psCheck = connection.prepareStatement(sqlCheckAthlete);
+            psCheck.setInt(1, id);
+            ResultSet rs = psCheck.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                System.out.println("Impossible de supprimer cette discipline car elle a des athletes associes !");
+                return;
+            }
+            psCheck = connection.prepareStatement(sqlCheckCompetition);
+            psCheck.setInt(1, id);
+            rs = psCheck.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                System.out.println("Impossible de supprimer cette discipline car elle a des competitions associees !");
+                return;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         String sql = "DELETE FROM discipline WHERE id = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
